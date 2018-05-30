@@ -1,6 +1,7 @@
 import time
 import random
 import itertools
+from termcolor import colored
 
 
 def naiveKnapSack(sackWeight: int, itemWeight: list, itemValue: list, result: dict):
@@ -21,7 +22,6 @@ def naiveKnapSack(sackWeight: int, itemWeight: list, itemValue: list, result: di
                 result[tempMax].append(temp)
     wynik = list(result.keys())[len(result)-1]
     listawynikowa = []
-    print(result[wynik])
     for i in range(len(result[wynik])):
         for j in range(len(itemValue)):
             if int(result[wynik][i][j]):
@@ -47,6 +47,7 @@ def greedyKnapSack(sackWeight: int, itemWeight: list, itemValue: list, result: d
             result.append(itemValue[i])
             tempWeight += itemWeight[i]
     return resultVal, result
+
 
 def dynamicKnapSack(sackWeight: int, itemWeight: list, itemValue: list, result: list):
     matrix = [0]*(len(itemValue)+1)
@@ -81,13 +82,70 @@ def dynamicKnapSack(sackWeight: int, itemWeight: list, itemValue: list, result: 
 
     return matrix[len(itemValue)][sackWeight], result
 
-itemValue = [60, 100, 120, 80, 65]
-itemWeight = [10, 20, 30, 20, 10]
-sackWeight = 50
-result = {}
-print(naiveKnapSack(sackWeight , itemWeight , itemValue , result))
-result = {}
-print(greedyKnapSack(sackWeight , itemWeight , itemValue , result))
-result = []
-print(dynamicKnapSack(sackWeight , itemWeight , itemValue , result))
+
+#itemValue = [60, 100, 120, 80, 65]
+#itemWeight = [10, 20, 30, 20, 10]
+#sackWeight = 50
+itemValue = []
+itemWeight = []
+sackWeight = 0
+done = False
+while not done:
+    while True:
+        try:
+            size = int(input('Wprowadz wielkość plecaka(ilość przedmiotów): '))
+            break
+        except ValueError:
+            print(colored('Niepoprawna wartość, spróbuj ponownie.', 'red'))
+
+    while True:
+        try:
+            sackWeight = int(input('Wprowadź maksymalną wagę plecaka: '))
+            break
+        except ValueError:
+            print(colored('Niepoprawna wartość, spróbuj ponownie.', 'red'))
+    print('\nWprowadź wartość przedmiotów. ')
+    for i in range(size, 0, -1):
+        while True:
+            try:
+                item = int(input('Pozostało ' + str(i) + ' przedmiotów\n'))
+                break
+            except ValueError:
+                print(colored('Niepoprawna wartość, spróbuj ponownie.', 'red'))
+        itemValue.append(item)
+    print('\nWprowadź wagę przedmiotów. ')
+    for i in range(size, 0, -1):
+        while True:
+            try:
+                item = int(input('Pozostało ' + str(i) + ' przedmiotów\n'))
+                break
+            except ValueError:
+                print(colored('Niepoprawna wartość, spróbuj ponownie.', 'red'))
+        itemWeight.append(item)
+    print('Oto wprowadzone dane: ')
+    print('Waga plecaka: ', sackWeight)
+    print('Wartość przedmiotów: ', itemValue)
+    print('Waga przedmiotów: ', itemWeight)
+    print('\nCzy chcesz wykonać algorytmy dla powyższych danych?', '0 -- nie', '1 -- tak', sep='\n')
+    ifCalculate = int(input())
+    if ifCalculate == 1:
+        result = {}
+        print('Algorytm plecakowy naiwny', naiveKnapSack(sackWeight , itemWeight , itemValue , result), sep='\n')
+        result = {}
+        print('Algorytm plecakowy zachłanny', greedyKnapSack(sackWeight , itemWeight , itemValue , result), sep='\n')
+        result = []
+        print('Algorytm plecakowy dynamiczny', dynamicKnapSack(sackWeight , itemWeight , itemValue , result), sep='\n')
+        print('\nCzy chcesz wykonać algorytm ponownie?')
+        print('0 -- nie')
+        print('1 -- tak')
+        x = int(input())
+        if x == 0:
+            done = True
+            print('Do widzenia!')
+    else:
+        print('Czy chcesz wprowadzić dane ponownie?', '0 -- nie', '1 -- tak', sep='\n')
+        ifEnter = int(input())
+        if ifEnter == 0:
+            done = True
+            print(colored('Do widzenia!', 'green'))
 
